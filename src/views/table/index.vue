@@ -180,9 +180,9 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            // saveAsImage: {} // 保存为图片
-          }
+          // feature: {
+          //   saveAsImage: {} // 保存为图片
+          // }
         },
         xAxis: {
           type: 'category',
