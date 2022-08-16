@@ -181,7 +181,7 @@ export default {
         toolbox: {
           show: true,
           feature: {
-            saveAsImage: {}
+            // saveAsImage: {} // 保存为图片
           }
         },
         xAxis: {
@@ -221,9 +221,6 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            saveAsImage: {}
-          }
         },
         xAxis: {
           type: 'category',
@@ -262,9 +259,6 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            saveAsImage: {}
-          }
         },
         xAxis: {
           type: 'category',
@@ -303,9 +297,6 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            saveAsImage: {}
-          }
         },
         xAxis: {
           type: 'category',
@@ -344,9 +335,6 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            saveAsImage: {}
-          }
         },
         xAxis: {
           type: 'category',
@@ -385,9 +373,6 @@ export default {
         },
         toolbox: {
           show: true,
-          feature: {
-            saveAsImage: {}
-          }
         },
         xAxis: {
           type: 'category',
