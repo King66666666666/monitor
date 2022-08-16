@@ -7,7 +7,7 @@
       <div class="sort-box">
         <div class="item-box">
           <span>浏览量(PV)</span>
-          <span>2109832</span>
+          <span>2109834</span>
           <span>较昨日 <i class="up">16.57%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
