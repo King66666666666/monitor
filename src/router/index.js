@@ -47,12 +47,14 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
+    children: [
+      {
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'xxxxx', icon: 'dashboard' }
-    }]
+      meta: { title: '首页', icon: 'dashboard' },
+      },
+    ]
   },
 
   {
@@ -60,19 +62,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'xxxx', icon: 'el-icon-s-help' },
+    meta: { title: '概览', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'xxx', icon: 'table' }
+        meta: { title: '核心数据', icon: 'table' }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'xxx', icon: 'tree' }
+        meta: { title: '综合数据', icon: 'tree' }
       }
     ]
   },
@@ -85,7 +87,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'xxxx', icon: 'form' }
+        meta: { title: '健康状况', icon: 'form' }
       }
     ]
   },
@@ -93,69 +95,24 @@ export const constantRoutes = [
   {
     path: '/nested',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'xxxx',
-      icon: 'nested'
-    },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        path: 'index',
+        component: () => import('@/views/nested/index'), // Parent router-view
         name: 'Menu1',
-        meta: { title: 'xxx' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'xx' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'xx' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'x' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'x' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'xx' }
-          }
-        ]
+        meta: { title: '性能预览',icon:'nested' },
       },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'xxx' }
-      }
     ]
   },
 
   {
-    path: 'external-link',
+    path: '/regional',
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'index',
+        component:() => import('@/views/regional/index'),
+        meta: { title: '地域分布', icon: 'link' }
       }
     ]
   },
