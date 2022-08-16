@@ -23,6 +23,7 @@ import { BarChart,LineChart } from 'echarts/charts';
 import {
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
   GridComponent,
   DatasetComponent,
   TransformComponent
@@ -36,6 +37,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 echarts.use([
   TitleComponent,
   TooltipComponent,
+  ToolboxComponent,
   GridComponent,
   DatasetComponent,
   TransformComponent,
