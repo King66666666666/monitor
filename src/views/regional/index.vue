@@ -134,7 +134,6 @@ export default {
         legend: {
           orient: 'horizontal',//图例的排列方向
           x:'left',//图例的位置
-          // data:['订单量']
         },
 
         visualMap: {//颜色的设置  dataRange
@@ -162,6 +161,7 @@ export default {
           {
             type: 'map',
             mapType: 'china',
+            showLegendSymbol:false, // 不显示小点
             roam: false,//是否开启鼠标缩放和平移漫游
             itemStyle:{//地图区域的多边形 图形样式
               normal:{//是图形在默认状态下的样式
