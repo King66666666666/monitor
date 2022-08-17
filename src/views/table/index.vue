@@ -4,8 +4,9 @@
       <el-date-picker
         v-model="time"
         type="date"
-        placeholder="今天"
-        :class="{sma:!time,big:time}">
+        placeholder="筛选时间"
+        style="width: 150px"
+        :picker-options="pickerDisabled">
       </el-date-picker>
     </div>
     <el-card class="box-card">
@@ -132,7 +133,19 @@
 export default {
   data() {
     return {
-      time:''
+      time:'',
+      pickerDisabled: {
+        disabledDate: (time) => {
+          return time.getTime() > new Date(new Date().toLocaleDateString()).getTime();
+        },
+        // 快捷选项
+        // shortcuts:[{
+        //   text: '今天',
+        //   onClick(picker) {
+        //     picker.$emit('pick', new Date());
+        //   }
+        // }]
+      },
     }
   },
   mounted() {
@@ -480,11 +493,5 @@ export default {
 .block {
   float: right;
   margin-bottom: 10px;
-}
-.sma {
-  width: 100px;
-}
-.big {
-  width: 150px;
 }
 </style>
