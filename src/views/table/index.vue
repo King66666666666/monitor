@@ -1,5 +1,13 @@
 <template>
   <div class="app-container">
+    <div class="block">
+      <el-date-picker
+        v-model="time"
+        type="date"
+        placeholder="今天"
+        :class="{sma:!time,big:time}">
+      </el-date-picker>
+    </div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>流量数据</span>
@@ -124,7 +132,7 @@
 export default {
   data() {
     return {
-
+      time:''
     }
   },
   mounted() {
@@ -468,5 +476,15 @@ export default {
 }
 .down {
   color: red;
+}
+.block {
+  float: right;
+  margin-bottom: 10px;
+}
+.sma {
+  width: 100px;
+}
+.big {
+  width: 150px;
 }
 </style>

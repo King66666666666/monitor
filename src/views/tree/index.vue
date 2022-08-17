@@ -1,81 +1,89 @@
 <template>
   <div class="app-container">
+    <div class="block">
+      <el-date-picker
+        v-model="time"
+        type="date"
+        placeholder="今天"
+        :class="{sma:!time,big:time}">
+      </el-date-picker>
+    </div>
     <div class="sort-box">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            网站访问量Top 10
-            <el-tooltip class="item" effect="dark" content="统计网站的访问数量" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          网站访问量Top 10
+          <el-tooltip class="item" effect="dark" content="统计网站的访问数量" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="traffic"></div>
       </el-card>
       <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>
-          来源网站Top 10
-          <el-tooltip class="item" effect="dark" content="统计不同来源的网站数量" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-          </el-tooltip>
-        </span>
-      </div>
+        <div slot="header" class="clearfix">
+      <span>
+        来源网站Top 10
+        <el-tooltip class="item" effect="dark" content="统计不同来源的网站数量" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+        </el-tooltip>
+      </span>
+        </div>
         <div class="bar-chart" ref="source"></div>
-    </el-card>
+      </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            城市名称访问用户量Top 10
-            <el-tooltip class="item" effect="dark" placement="top">
-              <div slot="content">在不同城市使用App的用户量分布情况。<br>ps: 城市是根据ip地址查询出来的，并不是<br>每个ip都能查询出来，查询出来的结果也未<br>必准确，只作为趋势参考。</div>
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          城市名称访问用户量Top 10
+          <el-tooltip class="item" effect="dark" placement="top">
+            <div slot="content">在不同城市使用App的用户量分布情况。<br>ps: 城市是根据ip地址查询出来的，并不是<br>每个ip都能查询出来，查询出来的结果也未<br>必准确，只作为趋势参考。</div>
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="city"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            设备型号用户量Top 10
-            <el-tooltip class="item" effect="dark" content="不同设备型号的用户量分布情况" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          设备型号用户量Top 10
+          <el-tooltip class="item" effect="dark" content="不同设备型号的用户量分布情况" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="equipment"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            系统版本用户量Top 10
-            <el-tooltip class="item" effect="dark" content="不同设备型号的用户量分布情况" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          系统版本用户量Top 10
+          <el-tooltip class="item" effect="dark" content="不同设备型号的用户量分布情况" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="system_version"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            浏览器使用量Top 10
-            <el-tooltip class="item" effect="dark" content="数值代表使用的浏览器的数量" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          浏览器使用量Top 10
+          <el-tooltip class="item" effect="dark" content="数值代表使用的浏览器的数量" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="browser"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>
-            设备分辨率量Top 10
-            <el-tooltip class="item" effect="dark" content="数值代表设备的物理分辨率" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
+        <span>
+          设备分辨率量Top 10
+          <el-tooltip class="item" effect="dark" content="数值代表设备的物理分辨率" placement="top">
+            <i class="el-icon-warning-outline" style="color: gray"></i>
+          </el-tooltip>
+        </span>
         </div>
         <div class="bar-chart" ref="resolution"></div>
       </el-card>
@@ -87,7 +95,7 @@
 export default {
   data() {
     return {
-
+      time:''
     }
   },
   mounted() {
@@ -384,10 +392,21 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  width: 100%;
 }
 .bar-chart {
   width: 100%;
   height: 200px;
+}
+.block {
+  float: right;
+  margin-bottom: 10px;
+}
+.sma {
+  width: 100px;
+}
+.big {
+  width: 150px;
 }
 </style>
 
