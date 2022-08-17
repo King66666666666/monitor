@@ -10,9 +10,7 @@
             </el-tooltip>
           </span>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
+        <div class="bar-chart" ref="traffic"></div>
       </el-card>
       <el-card class="box-card">
       <div slot="header" class="clearfix">
@@ -23,9 +21,7 @@
           </el-tooltip>
         </span>
       </div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{'列表内容 ' + o }}
-      </div>
+        <div class="bar-chart" ref="source"></div>
     </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -37,9 +33,7 @@
             </el-tooltip>
           </span>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
+        <div class="bar-chart" ref="city"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -50,9 +44,7 @@
             </el-tooltip>
           </span>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
+        <div class="bar-chart" ref="equipment"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -63,35 +55,29 @@
             </el-tooltip>
           </span>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
-      </el-card>
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>
-            应用版本访问用户量Top 10
-            <el-tooltip class="item" effect="dark" content="数值代表使用的浏览器的数量" placement="top">
-              <i class="el-icon-warning-outline" style="color: gray"></i>
-            </el-tooltip>
-          </span>
-        </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
+        <div class="bar-chart" ref="system_version"></div>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>
             浏览器使用量Top 10
+            <el-tooltip class="item" effect="dark" content="数值代表使用的浏览器的数量" placement="top">
+              <i class="el-icon-warning-outline" style="color: gray"></i>
+            </el-tooltip>
+          </span>
+        </div>
+        <div class="bar-chart" ref="browser"></div>
+      </el-card>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>
+            设备分辨率量Top 10
             <el-tooltip class="item" effect="dark" content="数值代表设备的物理分辨率" placement="top">
               <i class="el-icon-warning-outline" style="color: gray"></i>
             </el-tooltip>
           </span>
         </div>
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容 ' + o }}
-        </div>
+        <div class="bar-chart" ref="resolution"></div>
       </el-card>
     </div>
   </div>
@@ -99,31 +85,288 @@
 
 <script>
 export default {
-
   data() {
     return {
 
     }
   },
+  mounted() {
+    this.showCharts()
+  },
   watch: {
 
   },
-
   methods: {
+    showCharts(){
+      const traffic = this.$echarts.init(this.$refs.traffic)
+      const source = this.$echarts.init(this.$refs.source)
+      const city = this.$echarts.init(this.$refs.city)
+      const equipment = this.$echarts.init(this.$refs.equipment)
+      const system_version = this.$echarts.init(this.$refs.system_version)
+      const browser = this.$echarts.init(this.$refs.browser)
+      const resolution = this.$echarts.init(this.$refs.resolution)
 
+      traffic.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/10000) + 'w';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [18203, 23489, 29034, 104970, 131744, 630230]
+          }
+        ]
+      })
+      source.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/10000) + 'w';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [18293, 23419, 20034, 104970, 317144, 230230]
+          }
+        ]
+      })
+      city.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/1000) + 'k';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['北京', '上海', '广州', '深圳', '西安', '成都']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [1803, 2489, 2934, 10490, 13174, 23230]
+          }
+        ]
+      })
+      equipment.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              if(value < 1000){
+                return value
+              }
+              return (value/1000).toFixed(1) + 'k';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['iphone 6/7/8 Plus', 'iphone 6/7/8', 'vivo X21A', 'OPPO R11', 'HUWEI P40', 'PACM00']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [183, 289, 294, 970, 1344, 630]
+          }
+        ]
+      })
+      system_version.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/10000) + 'w';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['web', 'android 6.0.1', 'ios 9.1', 'ios 10.1', 'ios 13.2.3', 'android 5.0']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [18203, 23489, 29034, 104970, 131744, 630230]
+          }
+        ]
+      })
+      browser.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/10000) + 'w';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['chrome', '未知', 'safari', 'firefox', 'msie 7.0', 'edge']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [18203, 23489, 29034, 104970, 131744, 630230]
+          }
+        ]
+      })
+      resolution.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {},
+        grid: {
+          top:'3%',
+          left: '2%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01],
+          position:'top',
+          axisLabel:{
+            formatter:function(value){
+              return parseInt(value/10000) + 'w';
+            }
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['1920x1080', '1280x800', '1792x1120', '1366x768', '800x600', '2560x1440']
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [18203, 23489, 29034, 104970, 131744, 630230]
+          }
+        ]
+      })
+    }
   }
 }
 </script>
 
 <style scoped>
-.text {
-  font-size: 14px;
-}
-
-.item {
-  margin-bottom: 18px;
-}
-
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -141,6 +384,10 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.bar-chart {
+  width: 100%;
+  height: 200px;
 }
 </style>
 
