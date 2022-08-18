@@ -136,7 +136,7 @@ export default {
           x:'left',//图例的位置
         },
 
-        visualMap: {//颜色的设置  dataRange
+        visualMap: {//颜色的设置
           x: 'left',
           y: 'center',
           splitList: [
