@@ -50,7 +50,7 @@
     <div class="error-box">
       <el-card class="error-card">
         <div slot="header" class="clearfix">
-          <span style="cursor: pointer">
+          <span style="cursor: pointer" @click="toJsError">
             JS报错趋势 <i class="el-icon-arrow-right"></i>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">程序运行时出错，使用<br>window.onerror进行异常捕获并上报</div>
@@ -62,7 +62,7 @@
       </el-card>
       <el-card class="error-card">
         <div slot="header" class="clearfix">
-          <span style="cursor: pointer">
+          <span style="cursor: pointer" @click="toCustomError">
             自定义异常趋势 <i class="el-icon-arrow-right"></i>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">用户自定义报错，console.error打印<br>的错误均视为自定义错误</div>
@@ -74,7 +74,7 @@
       </el-card>
       <el-card class="error-card">
         <div slot="header" class="clearfix">
-          <span style="cursor: pointer">
+          <span style="cursor: pointer" @click="toStaticError">
             静态资源加载报错 <i class="el-icon-arrow-right"></i>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">静态资源加载失败的数量统计</div>
@@ -86,7 +86,7 @@
       </el-card>
       <el-card class="error-card">
         <div slot="header" class="clearfix">
-          <span style="cursor: pointer">
+          <span style="cursor: pointer" @click="toRequestError">
             接口请求报错 <i class="el-icon-arrow-right"></i>
             <el-tooltip class="item" effect="dark" placement="top">
               <div slot="content">接口请求发生400,500等状态的报错数量</div>
@@ -292,6 +292,18 @@ export default {
           }
         ]
       })
+    },
+    toJsError(){
+      this.$router.push({name: 'JsError'})
+    },
+    toCustomError(){
+      this.$router.push({name: 'CustomError'})
+    },
+    toStaticError(){
+      this.$router.push({name: 'StaticError'})
+    },
+    toRequestError(){
+      this.$router.push({name: 'RequestError'})
     }
   },
   computed:{

@@ -10,43 +10,15 @@
         </el-page-header>
       </div>
     </el-header>
-    <el-card class="box-card" style="width: 66%;float: left">
+    <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span><i class="el-icon-s-data"></i>静态资源加载报错</span>
+        <span><i class="el-icon-s-order"></i>自定义报错统计</span>
       </div>
-      <div ref="staticError" class="bar-chart"></div>
-    </el-card>
-    <el-card class="box-card" style="width: 33%;float: right">
-      <div slot="header" class="clearfix">
-        <span><i class="el-icon-document"></i>今日概况</span>
-      </div>
-      <div class="sort-box">
-        <div class="item">
-          <i class="el-icon-s-grid" style="font-size: 48px;color: #2f4256"></i>
-          <div style="text-align: center">
-            <div style="margin-bottom: 5px">总发生次数</div>
-            <div>1134次</div>
-          </div>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-copy" style="font-size: 48px;color: #2f4256"></i>
-          <div style="text-align: center">
-            <div style="margin-bottom: 5px">影响页面次数</div>
-            <div>1134次</div>
-          </div>
-        </div>
-        <div class="item">
-          <i class="el-icon-s-custom" style="font-size: 48px;color: #2f4256"></i>
-          <div style="text-align: center">
-            <div style="margin-bottom: 5px">影响用户数</div>
-            <div>934位</div>
-          </div>
-        </div>
-      </div>
+      <div ref="customError" class="bar-chart"></div>
     </el-card>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>资源加载失败列表</span>
+        <span>自定义异常 console.error</span>
       </div>
       <div class="infinite-list-wrapper" style="overflow:auto;height: 400px">
         <ul
@@ -90,8 +62,8 @@ export default {
       },2000)
     },
     showCharts(){
-      const staticError = this.$echarts.init(this.$refs.staticError)
-      staticError.setOption({
+      const customError = this.$echarts.init(this.$refs.customError)
+      customError.setOption({
         xAxis: {
           type: 'category',
           data: ['01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14','01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14']
@@ -172,19 +144,5 @@ export default {
 ul {
   list-style: none;
   padding: 0;
-}
-.sort-box {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  height: 200px;
-}
-.sort-box .item{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  width: 48%;
-  font-size: 12px;
 }
 </style>

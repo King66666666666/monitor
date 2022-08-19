@@ -87,9 +87,29 @@ export const constantRoutes = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: '健康状况', icon: 'form' }
+        meta: { title: '健康状况', icon: 'form' },
       }
     ]
+  },
+  {
+    path: '/jsError',
+    name: 'JsError',
+    component: () => import('@/views/jsError/index'),
+  },
+  {
+    path: '/customError',
+    name: 'CustomError',
+    component: () => import('@/views/customError/index'),
+  },
+  {
+    path: '/staticError',
+    name: 'StaticError',
+    component: () => import('@/views/staticError/index'),
+  },
+  {
+    path: '/requestError',
+    name: 'RequestError',
+    component: () => import('@/views/requestError/index'),
   },
 
   {
