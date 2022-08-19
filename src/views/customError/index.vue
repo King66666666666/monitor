@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-header>
-      <div style="width:100%;position: fixed !important;top: 0;left: 0;z-index:9999">
+      <div style="width:100%;z-index:9999;position: fixed !important;top: 0;left: 0;">
         <el-page-header
           @back="goBack"
         >
