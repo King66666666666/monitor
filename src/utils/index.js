@@ -1,9 +1,5 @@
 /**
- * Created by PanJiaChen on 16/11/18.
- */
-
-/**
- * Parse the time to string
+ * 格式化时间 例：2022-08-20 12:00
  * @param {(Object|string|number)} time
  * @param {string} cFormat
  * @returns {string | null}
@@ -52,6 +48,7 @@ export function parseTime(time, cFormat) {
 }
 
 /**
+ * 将时间格式化为 刚刚 几分钟前 几小时前 一天前
  * @param {number} time
  * @param {string} option
  * @returns {string}
