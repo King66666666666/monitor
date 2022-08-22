@@ -30,7 +30,7 @@
       </div>
       <div class="error-sort">
         <div class="item">
-          <el-progress type="circle" :percentage="9.7" :width="80"></el-progress>
+          <el-progress type="circle" :percentage="this.jsErrorPercent" :width="80"></el-progress>
           <div class="error-title">JS错误</div>
         </div>
         <div class="item">
@@ -38,7 +38,7 @@
           <div class="error-title">自定义异常</div>
         </div>
         <div class="item">
-          <el-progress type="circle" :percentage="19" :width="80"></el-progress>
+          <el-progress type="circle" :percentage="this.staticErrorPercent" :width="80"></el-progress>
           <div class="error-title">静态资源异常</div>
         </div>
         <div class="item">
@@ -101,6 +101,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   data() {
     return {
@@ -119,9 +121,13 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
   methods: {
+    getDate(){
+      this.$store.dispatch('error/getError')
+    },
     showCharts(){
       const jsError = this.$echarts.init(this.$refs.jsError)
       const customError = this.$echarts.init(this.$refs.customError)
@@ -145,7 +151,12 @@ export default {
           type: 'category',
           boundaryGap: false,
           // prettier-ignore
-          data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+          data: this.timeData_1,
+          axisLabel:{
+            formatter:function (params){
+              return params.replace('T','日') + ':00'
+            }
+          }
         },
         yAxis: {
           type: 'value',
@@ -165,7 +176,7 @@ export default {
             type: 'line',
             smooth: true,
             // prettier-ignore
-            data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+            data: this.timeList_1,
           }
         ]
       })
@@ -227,7 +238,12 @@ export default {
           type: 'category',
           boundaryGap: false,
           // prettier-ignore
-          data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+          data: this.timeData_2,
+          axisLabel:{
+            formatter:function (params){
+              return params.replace('T','日') + ':00'
+            }
+          }
         },
         yAxis: {
           type: 'value',
@@ -247,7 +263,7 @@ export default {
             type: 'line',
             smooth: true,
             // prettier-ignore
-            data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+            data: this.timeList_2,
           }
         ]
       })
@@ -294,7 +310,9 @@ export default {
       })
     },
     toJsError(){
-      this.$router.push({name: 'JsError'})
+      this.$router.push({
+        name: 'JsError',
+      })
     },
     toCustomError(){
       this.$router.push({name: 'CustomError'})
@@ -307,6 +325,7 @@ export default {
     }
   },
   computed:{
+    ...mapState('error',['errors']),
     scoreDescribe(){
       if(this.score < 60){
         return '极差'
@@ -321,7 +340,78 @@ export default {
       }else{
         return '未知'
       }
-    }
+    },
+    jsErrorList(){
+      let result = []
+      this.errors.forEach(item => {
+        if(item.type === 0 || item.type === 1){
+          result.push(item)
+        }
+      })
+      return result
+    },
+    staticErrorList(){
+      let result = []
+      this.errors.forEach(item => {
+        // 数据中没有此类型错误
+        // 展示使用jsErrorList
+        // 改为2,3即为staticErrorList
+        if(item.type === 0 || item.type === 1){
+          result.push(item)
+        }
+      })
+      return result
+    },
+    jsErrorPercent(){
+      let sum = 0
+      this.errors.forEach(item => {
+        if(item.type === 0 || item.type === 1){
+          sum++
+        }
+      })
+      return (sum/this.errors.length*100).toFixed(1)
+    },
+    staticErrorPercent(){
+      let sum = 0
+      this.errors.forEach(item => {
+        if(item.type === 2 || item.type === 3){
+          sum++
+        }
+      })
+      return (sum/this.errors.length*100).toFixed(1)
+    },
+    timeData_1(){
+      let result = []
+      this.jsErrorList.forEach(item => {
+        if(result.indexOf(item.time.substring(8,13)) === -1){
+          result.push(item.time.substring(8,13))
+        }
+      })
+      return result
+    },
+    timeList_1(){
+      let result = new Array(this.timeData_1.length).fill(0)
+      this.jsErrorList.forEach(item => {
+        result[this.timeData_1.indexOf(item.time.substring(8,13))] ++
+      })
+      return result
+    },
+    timeData_2(){
+      let result = []
+      this.staticErrorList.forEach(item => {
+        if(result.indexOf(item.time.substring(8,13)) === -1){
+          result.push(item.time.substring(8,13))
+        }
+      })
+      return result
+    },
+    timeList_2(){
+      let result = new Array(this.timeData_2.length).fill(0)
+      this.staticErrorList.forEach(item => {
+        result[this.timeData_2.indexOf(item.time.substring(8,13))] ++
+      })
+      return result
+    },
   }
 }
 </script>

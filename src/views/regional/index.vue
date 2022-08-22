@@ -21,7 +21,7 @@
         <span>访问用户城市分布TOP榜</span>
       </div>
       <el-table
-        :data="tableData"
+        :data="this.areaSortList"
         stripe
         height="500"
         style="width: 100%">
@@ -31,12 +31,12 @@
           width="130">
         </el-table-column>
         <el-table-column
-          prop="city"
+          prop="name"
           label="城市"
           width="130">
         </el-table-column>
         <el-table-column
-          prop="users"
+          prop="value"
           label="用户数">
         </el-table-column>
       </el-table>
@@ -47,6 +47,7 @@
 
 <script>
 import '@/assets/js/china'
+import {mapState} from "vuex";
 export default {
   name:'index',
   data() {
@@ -57,69 +58,16 @@ export default {
           return time.getTime() > new Date(new Date().toLocaleDateString()).getTime();
         }
       },
-      tableData: [{
-        id: '1',
-        city: '北京',
-        users: 11367
-      },{
-        id: '2',
-        city: '上海',
-        users: 20267
-      },{
-        id: '3',
-        city: '浙江',
-        users: 17231
-      },{
-        id: '4',
-        city: '湖北',
-        users: 4332
-      },{
-        id: '5',
-        city: '广东',
-        users: 3167
-      },{
-        id: '6',
-        city: '安徽',
-        users: 2267
-      },{
-        id: '7',
-        city: '四川',
-        users: 2267
-      },{
-        id: '8',
-        city: '河南',
-        users: 2267
-      },{
-        id: '9',
-        city: '福建',
-        users: 2267
-      },{
-        id: '10',
-        city: '天津',
-        users: 2267
-      },{
-        id: '11',
-        city: '辽宁',
-        users: 1167
-      },{
-        id: '12',
-        city: '江苏',
-        users: 1167
-      },{
-        id: '13',
-        city: '香港',
-        users: 1111
-      },{
-        id: '14',
-        city: '内蒙古',
-        users: 533
-      },]
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
   methods:{
+    getDate(){
+      this.$store.dispatch('users/getUsers')
+    },
     showCharts(){
       const map = this.$echarts.init(this.$refs.map)
 
@@ -177,45 +125,77 @@ export default {
               }
             },
             top:"3%",//组件距离容器的距离
-            data:[
-              {name: '北京',value: Math.round(Math.random()*2000)},
-              {name: '天津',value: Math.round(Math.random()*2000)},
-              {name: '上海',value: Math.round(Math.random()*2000)},
-              {name: '重庆',value: Math.round(Math.random()*2000)},
-              {name: '河北',value: Math.round(Math.random()*2000)},
-              {name: '河南',value: Math.round(Math.random()*2000)},
-              {name: '云南',value: Math.round(Math.random()*2000)},
-              {name: '辽宁',value: Math.round(Math.random()*2000)},
-              {name: '黑龙江',value: Math.round(Math.random()*2000)},
-              {name: '湖南',value: Math.round(Math.random()*2000)},
-              {name: '安徽',value: Math.round(Math.random()*2000)},
-              {name: '山东',value: Math.round(Math.random()*2000)},
-              {name: '新疆',value: Math.round(Math.random()*2000)},
-              {name: '江苏',value: Math.round(Math.random()*2000)},
-              {name: '浙江',value: Math.round(Math.random()*2000)},
-              {name: '江西',value: Math.round(Math.random()*2000)},
-              {name: '湖北',value: Math.round(Math.random()*2000)},
-              {name: '广西',value: Math.round(Math.random()*2000)},
-              {name: '甘肃',value: Math.round(Math.random()*2000)},
-              {name: '山西',value: Math.round(Math.random()*2000)},
-              {name: '内蒙古',value: Math.round(Math.random()*2000)},
-              {name: '陕西',value: Math.round(Math.random()*2000)},
-              {name: '吉林',value: Math.round(Math.random()*2000)},
-              {name: '福建',value: Math.round(Math.random()*2000)},
-              {name: '贵州',value: Math.round(Math.random()*2000)},
-              {name: '广东',value: Math.round(Math.random()*2000)},
-              {name: '青海',value: Math.round(Math.random()*2000)},
-              {name: '西藏',value: Math.round(Math.random()*2000)},
-              {name: '四川',value: Math.round(Math.random()*2000)},
-              {name: '宁夏',value: Math.round(Math.random()*2000)},
-              {name: '海南',value: Math.round(Math.random()*2000)},
-              {name: '台湾',value: Math.round(Math.random()*2000)},
-              {name: '香港',value: Math.round(Math.random()*2000)},
-              {name: '澳门',value: Math.round(Math.random()*2000)}
-            ]
+            data:this.areaList
           }
         ]
       })
+    },
+  },
+  computed:{
+    ...mapState('users',['users']),
+    areaList(){
+      let result = [
+        {name: '北京',value: 0},
+        {name: '天津',value: 0},
+        {name: '上海',value: 0},
+        {name: '重庆',value: 0},
+        {name: '河北',value: 0},
+        {name: '河南',value: 0},
+        {name: '云南',value: 0},
+        {name: '辽宁',value: 0},
+        {name: '黑龙江',value: 0},
+        {name: '湖南',value: 0},
+        {name: '安徽',value: 0},
+        {name: '山东',value: 0},
+        {name: '新疆',value: 0},
+        {name: '江苏',value: 0},
+        {name: '浙江',value: 0},
+        {name: '江西',value: 0},
+        {name: '湖北',value: 0},
+        {name: '广西',value: 0},
+        {name: '甘肃',value: 0},
+        {name: '山西',value: 0},
+        {name: '内蒙古',value: 0},
+        {name: '陕西',value: 0},
+        {name: '吉林',value: 0},
+        {name: '福建',value: 0},
+        {name: '贵州',value: 0},
+        {name: '广东',value: 0},
+        {name: '青海',value: 0},
+        {name: '西藏',value: 0},
+        {name: '四川',value: 0},
+        {name: '宁夏',value: 0},
+        {name: '海南',value: 0},
+        {name: '台湾',value: 0},
+        {name: '香港',value: 0},
+        {name: '澳门',value: 0}
+      ]
+      let reg = /省|市|自治区|自治州|县|区/g
+      this.users.forEach(item => {
+        if(result.find(val => val.name === item.userarea.replace(reg,'')) === undefined){
+          result.push({
+            name:item.userarea.replace(reg,''),
+            value:1,
+            id:result.length + 1,
+          })
+        }else{
+          result.forEach(val => {
+            if(val.name === item.userarea.replace(reg,'')){
+              val.value ++
+            }
+          })
+        }
+      })
+      return result
+    },
+    areaSortList(){
+      let result = this.areaList.sort((a,b) => {
+        return b.value - a.value
+      })
+      result.forEach((item,index) => {
+        item.id = index+1
+      })
+      return result
     }
   }
 }

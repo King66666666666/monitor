@@ -22,7 +22,7 @@
             </el-tooltip>
           </span>
         </div>
-        <h1>158.91ms</h1>
+        <h1>{{ttfb}}ms</h1>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -44,7 +44,7 @@
             </el-tooltip>
           </span>
         </div>
-        <h1>2.74s</h1>
+        <h1>{{allrt}}s</h1>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -65,7 +65,7 @@
           </span>
         </div>
         <el-table
-          :data="tableData"
+          :data="this.routerList"
           stripe
           style="width: 100%"
           :row-style="{height:'35px'}"
@@ -81,7 +81,7 @@
           </el-table-column>
           <el-table-column
             prop="average_time"
-            label="平均耗时"
+            label="平均耗时(ms)"
             width="150">
           </el-table-column>
         </el-table>
@@ -100,7 +100,7 @@
             </el-tooltip>
           </span>
         </div>
-        <h1>263</h1>
+        <h1>{{Math.floor(Math.random()*500)}}</h1>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -111,7 +111,7 @@
             </el-tooltip>
           </span>
         </div>
-        <h1>2214.15ms</h1>
+        <h1>{{(Math.random()*2500).toFixed(2)}}ms</h1>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -122,7 +122,7 @@
             </el-tooltip>
           </span>
         </div>
-        <h1>100%</h1>
+        <h1>{{Math.floor(Math.random()*100)}}%</h1>
       </el-card>
       <el-card class="box-card">
         <div slot="header" class="clearfix">
@@ -165,6 +165,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "index",
   data() {
@@ -219,9 +221,13 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
   methods:{
+    getDate(){
+      this.$store.dispatch('performance/getPerformance')
+    },
     showCharts(){
       const request_time = this.$echarts.init(this.$refs.request_time)
       const request_num = this.$echarts.init(this.$refs.request_num)
@@ -267,11 +273,11 @@ export default {
               show: false
             },
             data: [
-              { value: 1048, name: '< 1秒' },
-              { value: 735, name: '1-5秒' },
-              { value: 580, name: '5-10秒' },
-              { value: 484, name: '10-30秒' },
-              { value: 300, name: '> 30秒' }
+              { value: this.timeList[0], name: '< 1秒' },
+              { value: this.timeList[1], name: '1-5秒' },
+              { value: this.timeList[2], name: '5-10秒' },
+              { value: this.timeList[3], name: '10-30秒' },
+              { value: this.timeList[4], name: '> 30秒' }
             ]
           }
         ]
@@ -317,15 +323,80 @@ export default {
               show: false
             },
             data: [
-              { value: 148, name: '< 1秒' },
-              { value: 7, name: '1-5秒' },
-              { value: 5, name: '5-10秒' },
-              { value: 8, name: '10-30秒' },
-              { value: 3, name: '> 30秒' }
+              { value: Math.floor(Math.random()*300), name: '< 1秒' },
+              { value: Math.floor(Math.random()*10), name: '1-5秒' },
+              { value: Math.floor(Math.random()*5), name: '5-10秒' },
+              { value: Math.floor(Math.random()*10), name: '10-30秒' },
+              { value: Math.floor(Math.random()*5), name: '> 30秒' }
             ]
           }
         ]
       })
+    }
+  },
+  computed:{
+    ...mapState('performance',['performance']),
+    ttfb(){
+      let sum = 0
+      let num = 0
+      this.performance.forEach(item => {
+        if(item.type === 4){
+          num++
+          sum += item.value
+        }
+      })
+      return (sum/num).toFixed(2)
+    },
+    allrt(){
+      let sum = 0
+      let num = 0
+      this.performance.forEach(item => {
+        if(item.type === 3){
+          num++
+          sum += item.value
+        }
+      })
+      return (sum/num).toFixed(2)
+    },
+    routerList(){
+      let result = []
+      this.performance.forEach(item => {
+        if(result.find(val => val.router === item.url) === undefined){
+          result.push({
+            router:item.url,
+            num:1,
+            sum_time:item.value
+          })
+        }else{
+          result.forEach(val => {
+            if(val.router === item.url){
+              val.num++
+              val.sum_time += item.value
+            }
+          })
+        }
+      })
+      result.forEach(item => {
+        item.average_time = (item.sum_time/item.num).toFixed(2)
+      })
+      return result
+    },
+    timeList(){
+      let result = new Array(5).fill(0)
+      this.performance.forEach(value => {
+        if(value.value < 1000){
+          result[0] ++
+        }else if(value.value < 5000){
+          result[1] ++
+        }else if(value.value < 10000){
+          result[2] ++
+        }else if(value.value < 30000){
+          result[3] ++
+        }else {
+          result[4] ++
+        }
+      })
+      return result
     }
   }
 }

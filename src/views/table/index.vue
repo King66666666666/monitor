@@ -16,27 +16,27 @@
       <div class="sort-box">
         <div class="item-box">
           <span>浏览量(PV)</span>
-          <span>2109834</span>
+          <span>{{this.pv.length}}</span>
           <span>较昨日 <i class="up">16.57%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
           <span>访客数(UV)</span>
-          <span>657891</span>
+          <span>{{ this.uv.length }}</span>
           <span>较昨日 <i class="up">4.78%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
           <span>新访客</span>
-          <span>129871</span>
+          <span>29</span>
           <span>较昨日 <i class="up">18.2%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
           <span>IP数</span>
-          <span>657591</span>
+          <span>{{this.ips.length}}</span>
           <span>较昨日 <i class="up">0.04%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
           <span>频次（人均）</span>
-          <span>3.21</span>
+          <span>{{this.frequency}}</span>
           <span>较昨日 <i class="up">11.46%</i> <i class="el-icon-top"></i></span>
         </div>
         <div class="item-box">
@@ -130,6 +130,8 @@
 
 <script>
 
+import {mapState} from "vuex";
+
 export default {
   data() {
     return {
@@ -149,9 +151,14 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
   methods: {
+    getDate(){
+      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('behavior/getBehaviors')
+    },
     showCharts(){
       const users = this.$echarts.init(this.$refs.users)
       const traffic = this.$echarts.init(this.$refs.traffic)
@@ -163,7 +170,7 @@ export default {
       users.setOption({
         xAxis: {
           type: 'category',
-          data: ['01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14','01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14']
+          data: this.timeData_1
         },
         yAxis: {
           type: 'value'
@@ -182,7 +189,7 @@ export default {
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130],
+            data: this.usersOfTime_1,
             type: 'bar',
             showBackground: true,
             barWidth:20,
@@ -209,7 +216,12 @@ export default {
           type: 'category',
           boundaryGap: false,
           // prettier-ignore
-          data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+          data: this.timeData_2,
+          axisLabel:{
+            formatter:function (params){
+              return params.replace('T','日') + ':00'
+            }
+          }
         },
         yAxis: {
           type: 'value',
@@ -229,7 +241,7 @@ export default {
             type: 'line',
             smooth: true,
             // prettier-ignore
-            data: [300, 280, 250, 260, 270, 300, 550, 500, 400, 390, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+            data: this.usersOfTime_2,
           }
         ]
       })
@@ -247,7 +259,12 @@ export default {
           type: 'category',
           boundaryGap: false,
           // prettier-ignore
-          data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+          data: this.timeData_2,
+          axisLabel:{
+            formatter:function (params){
+              return params.replace('T','日') + ':00'
+            }
+          }
         },
         yAxis: {
           type: 'value',
@@ -267,7 +284,7 @@ export default {
             type: 'line',
             smooth: true,
             // prettier-ignore
-            data: [300, 280, 280, 260, 270, 250, 540, 500, 440, 320, 380, 390, 400, 500, 600, 750, 800, 700, 600, 400],
+            data: this.usersOfTime_3,
           }
         ]
       })
@@ -423,6 +440,72 @@ export default {
           }
         ]
       })
+    }
+  },
+  computed:{
+    ...mapState('behavior',['behaviors']),
+    ...mapState('users',['users']),
+    nowMonth(){
+      return new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : new Date().getMonth() + 1
+    },
+    pv(){
+      return this.behaviors.filter((item) => item.type === 1)
+    },
+    uv(){
+      return this.behaviors.filter((item) => item.type === 0)
+    },
+    ips(){
+      let result = []
+      this.users.forEach(item => {
+        if(result.indexOf(item.userip) === -1){
+          result.push(item.userip)
+        }
+      })
+      return result
+    },
+    frequency(){
+      return (this.behaviors.length/this.uv.length).toFixed(2)
+    },
+    timeData_1(){
+      let result = []
+      this.uv.forEach(item => {
+        if(result.indexOf(item.time.substring(0,10)) === -1){
+          result.push(item.time.substring(0,10))
+        }
+      })
+      return result
+    },
+    timeData_2(){
+      let result = []
+      this.behaviors.forEach(item => {
+        if(item.time.substring(5,7) === this.nowMonth){
+          if(result.indexOf(item.time.substring(8,13)) === -1){
+            result.push(item.time.substring(8,13))
+          }
+        }
+      })
+      return result
+    },
+    usersOfTime_1(){
+      let result = new Array(this.timeData_1.length).fill(0)
+      this.uv.forEach(item => {
+        result[this.timeData_1.indexOf(item.time.substring(0,10))] ++
+      })
+      return result
+    },
+    usersOfTime_2(){
+      let result = new Array(this.timeData_2.length).fill(0)
+      this.pv.forEach(item => {
+        result[this.timeData_2.indexOf(item.time.substring(8,13))] ++
+      })
+      return result
+    },
+    usersOfTime_3(){
+      let result = new Array(this.timeData_2.length).fill(0)
+      this.uv.forEach(item => {
+        result[this.timeData_2.indexOf(item.time.substring(8,13))] ++
+      })
+      return result
     }
   }
 }

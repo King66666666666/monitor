@@ -93,6 +93,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   data() {
     return {
@@ -105,12 +107,14 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
-  watch: {
-
-  },
   methods: {
+    getDate(){
+      this.$store.dispatch('users/getUsers')
+      this.$store.dispatch('behavior/getBehaviors')
+    },
     showCharts(){
       const traffic = this.$echarts.init(this.$refs.traffic)
       const source = this.$echarts.init(this.$refs.source)
@@ -141,18 +145,22 @@ export default {
           position:'top',
           axisLabel:{
             formatter:function(value){
-              return parseInt(value/10000) + 'w';
+              if(value >= 10000){
+                return parseInt(value/10000) + 'w';
+              }else {
+                return value
+              }
             }
           }
         },
         yAxis: {
           type: 'category',
-          data: ['https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx', 'https://xxx.xxx.xxx']
+          data: this.urlList
         },
         series: [
           {
             type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744, 630230]
+            data: this.numOfUrl
           }
         ]
       })
@@ -183,7 +191,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx','www.xxx.xxx']
+          data: ['www.google.com','cn.bing.com','baidu.com','github.com','www.baidu.com','直接访问']
         },
         series: [
           {
@@ -213,18 +221,22 @@ export default {
           position:'top',
           axisLabel:{
             formatter:function(value){
-              return parseInt(value/1000) + 'k';
+              if(value >= 1000){
+                return parseInt(value/1000) + 'k';
+              }else {
+                return value
+              }
             }
           }
         },
         yAxis: {
           type: 'category',
-          data: ['北京', '上海', '广州', '深圳', '西安', '成都']
+          data: this.userAreaList
         },
         series: [
           {
             type: 'bar',
-            data: [1803, 2489, 2934, 10490, 13174, 23230]
+            data: this.numOfArea
           }
         ]
       })
@@ -375,6 +387,42 @@ export default {
           }
         ]
       })
+    }
+  },
+  computed:{
+    ...mapState('behavior',['behaviors']),
+    ...mapState('users',['users']),
+    urlList(){
+      let result = []
+      this.behaviors.forEach(item => {
+        if(result.indexOf(item.url) === -1){
+          result.push(item.url)
+        }
+      })
+      return result
+    },
+    numOfUrl(){
+      let result = new Array(this.urlList.length).fill(0)
+      this.behaviors.forEach(item => {
+        result[this.urlList.indexOf(item.url)] ++
+      })
+      return result
+    },
+    userAreaList(){
+      let result = []
+      this.users.forEach(item => {
+        if(result.indexOf(item.userarea) === -1){
+          result.push(item.userarea)
+        }
+      })
+      return result
+    },
+    numOfArea(){
+      let result = new Array(this.userAreaList.length).fill(0)
+      this.users.forEach(item => {
+        result[this.userAreaList.indexOf(item.userarea)] ++
+      })
+      return result
     }
   }
 }

@@ -4,6 +4,17 @@
 # 克隆项目
 git clone https://github.com/King66666666666/monitor.git
 
+# 配置数据库(MySQL)连接
+# 进入项目下的server目录
+# 修改db.js
+
+mysql: {
+    host:'xxx.xxx.xxx.xxx', // 数据库IP地址
+    user:'root', // 登录数据库的账号
+    password:'********', // 登录数据库的密码
+    database:'databaseName' // 指定要操作哪个数据库
+  }
+
 # 进入项目目录
 cd vue-admin-template
 

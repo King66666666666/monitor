@@ -25,9 +25,9 @@
           class="list"
           v-infinite-scroll="load"
           infinite-scroll-disabled="disabled">
-          <li v-for="i in count" class="list-item">
+          <li v-for="item in this.jsErrorList" class="list-item">
             <i class="el-icon-error" style="color: red"></i>
-            xxx Error{{i}}
+            {{item.msg}}
           </li>
         </ul>
         <p v-if="loading">加载中...</p>
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "index",
   data() {
@@ -48,9 +50,13 @@ export default {
     }
   },
   mounted() {
+    this.getDate()
     this.showCharts()
   },
   methods:{
+    getDate(){
+      this.$store.dispatch('error/getError')
+    },
     goBack() {
       this.$router.back()
     },
@@ -66,7 +72,12 @@ export default {
       jsError.setOption({
         xAxis: {
           type: 'category',
-          data: ['01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14','01', '02', '03', '04', '05', '06', '07','08', '09', '10', '11', '12', '13', '14']
+          data: this.timeData_1,
+          axisLabel:{
+            formatter:function (params){
+              return params.replace('T','日') + ':00'
+            }
+          }
         },
         yAxis: {
           type: 'value',
@@ -86,7 +97,7 @@ export default {
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130],
+            data: this.timeList_1,
             type: 'bar',
             showBackground: true,
             barWidth:20,
@@ -99,12 +110,38 @@ export default {
     },
   },
   computed:{
+    ...mapState('error',['errors']),
     noMore(){
       return this.count >= 20
     },
     disabled(){
       return this.loading || this.noMore
-    }
+    },
+    jsErrorList(){
+      let result = []
+      this.errors.forEach(item => {
+        if(item.type === 0 || item.type === 1){
+          result.push(item)
+        }
+      })
+      return result
+    },
+    timeData_1(){
+      let result = []
+      this.jsErrorList.forEach(item => {
+        if(result.indexOf(item.time.substring(8,13)) === -1){
+          result.push(item.time.substring(8,13))
+        }
+      })
+      return result
+    },
+    timeList_1(){
+      let result = new Array(this.timeData_1.length).fill(0)
+      this.jsErrorList.forEach(item => {
+        result[this.timeData_1.indexOf(item.time.substring(8,13))] ++
+      })
+      return result
+    },
   }
 }
 </script>
